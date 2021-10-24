@@ -1,0 +1,46 @@
+# User Defined Reflective Loader Kit Aggressor Script
+sub generate_my_dll {
+	local('$handle $data $loader $temp_dll');
+	# ---------------------------------------------------------------------
+	# Load a object file that contains a Reflective Loader.
+	# The architecture ($3) is used in the path.
+	# ---------------------------------------------------------------------
+	$handle = openf(script_resource("/bin/ReflectiveLoader.x64.o"));
+	$data   = readb($handle, -1);
+	closef($handle);
+	warn("Loaded Length: " . strlen($data));
+	if (strlen($data) eq 0) {
+		warn("Error loading reflective loader object file  - Reverting to using default Cobalt Strike Reflective Loader.");
+		return $null;
+	}
+	# ---------------------------------------------------------------------
+	# extract loader ($loader) from the object file data ($data).
+	# ---------------------------------------------------------------------
+	$loader = extract_reflective_loader($data);
+	warn("Extracted Length: " . strlen($loader));
+	if (strlen($loader) eq 0) {
+		warn("Error loading reflective loader object file  - Reverting to using default Cobalt Strike Reflective Loader.");
+		return $null;
+	}
+	# ---------------------------------------------------------------------
+	# Setup the reflective loader ($loader) in the beacon ($2).
+	# ---------------------------------------------------------------------
+	$temp_dll = setup_reflective_loader($2, $loader);
+	# ---------------------------------------------------------------------
+	# Give back the updated beacon DLL.
+	# ---------------------------------------------------------------------
+	return $temp_dll;
+}
+# ------------------------------------
+# $1 = DLL file name
+# $2 = DLL content
+# $3 = arch
+# ------------------------------------
+set BEACON_RDLL_GENERATE {
+	if ($3 eq "x86") {
+		warn("x86 selected - Reverting to using default Cobalt Strike Reflective Loader.");
+		return $null;
+	}
+	warn("========== Running 'BEACON_RDLL_GENERATE' for DLL " . $1 . " with architecture " . $3 . " ==========");
+	return generate_my_dll($1, $2, $3);
+}

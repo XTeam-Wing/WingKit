@@ -1,0 +1,6 @@
+item "Watson快速找补丁"{
+    local('$bid');
+    foreach $bid ($1){
+        bexecute_assembly($bid script_resource('/exe/Watson.exe'));
+    }
+}

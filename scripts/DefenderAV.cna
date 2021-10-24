@@ -1,0 +1,12 @@
+item "清除所有RunMRU记录"{
+    local ('$bid')
+    foreach $bid ($1){
+        bexecute_assembly($1, script_resource('/exe/CleanRunMRU.exe'), "clearall");
+    }
+}
+item "阻止第三方DLL注入"{
+local ('$bid')
+foreach $bid ($1){
+    bblockdlls($1);
+    }
+}

